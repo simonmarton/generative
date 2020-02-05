@@ -1,26 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import Perlin from './Perlin';
+import DeconcentricCircles from './DeconcentricCircles';
+import Cloud from './Cloud';
+import MaskedImage from './MaskedImage';
 
-export default App;
+export default () => {
+  const {
+    location: { pathname }
+  } = window;
+
+  if (pathname.startsWith('/dots-n-lines')) {
+    return <Perlin />;
+  } else if (pathname.startsWith('/cloud')) {
+    return <Cloud />;
+  } else if (pathname.startsWith('/mask')) {
+    return <MaskedImage />;
+  }
+  return <DeconcentricCircles />;
+};

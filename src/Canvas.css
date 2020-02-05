@@ -1,0 +1,12 @@
+.react-p5 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  /* background: #c8bba3; */
+}
+
+.react-p5 canvas {
+  /* border: 2px solid #333; */
+  /* padding: 10px; */
+}
