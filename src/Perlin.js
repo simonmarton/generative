@@ -6,6 +6,7 @@ import 'react-dat-gui/dist/index.css';
 
 import { Easing, lerp } from './utils';
 import Canvas from './Canvas';
+import GuiHider from './GuiHider';
 
 const noise3D = makeNoise3D(Date.now());
 
@@ -18,8 +19,8 @@ const METHOD_OPTIONS = {
 
 export default () => {
   // const [width, height] = [320, 320];
-  const [width, height] = [720, 720];
-  // const [width, height] = [window.innerWidth, window.innerHeight];
+  // const [width, height] = [720, 720];
+  const [width, height] = [window.innerWidth, window.innerHeight];
 
   const [offset, setOffset] = useState(0);
 
@@ -165,6 +166,7 @@ export default () => {
 
   return (
     <Fragment>
+      <GuiHider></GuiHider>
       <DatGui data={guiData} onUpdate={setGuiData} liveUpdate={false}>
         <DatNumber path="speed" min={0} max={0.02} step={0.005} />
         <DatBoolean path="loop" />

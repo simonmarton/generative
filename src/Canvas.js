@@ -3,7 +3,15 @@ import Sketch from 'react-p5';
 
 import './Canvas.css';
 
-export default ({ width, height, noLoop, background: backgroundProp = 'black', fullscreen, ...props }) => {
+export default ({
+  width,
+  height,
+  noLoop,
+  background: backgroundProp = 'black',
+  fullscreen,
+  resized = () => {},
+  ...props
+}) => {
   const [firstDraw, setFirstDraw] = useState(true);
 
   const [background, setBackground] = useState(backgroundProp);
@@ -17,9 +25,13 @@ export default ({ width, height, noLoop, background: backgroundProp = 'black', f
   };
 
   const setup = (p5, canvasParentRef) => {
-    // p5.createCanvas(width, height, p5.WEBGL).parent(canvasParentRef);
-    p5.createCanvas(width, height).parent(canvasParentRef);
-    // console.log(p5.WEBGL);
+    p5.setAttributes('antialias', true);
+    p5.createCanvas(
+      fullscreen ? window.innerWidth : width,
+      fullscreen ? window.innerHeight : height,
+      props.webgl ? p5.WEBGL : undefined
+    ).parent(canvasParentRef);
+
     p5.frameRate(30);
     // if (noLoop) {
     //   p5.noLoop();
@@ -35,10 +47,6 @@ export default ({ width, height, noLoop, background: backgroundProp = 'black', f
     }
   };
 
-  // console.log({ background });
-
-  // return <h1 style={{ background }}>na miva</h1>;
-
   return (
     <div style={{ background }}>
       <Sketch
@@ -49,6 +57,10 @@ export default ({ width, height, noLoop, background: backgroundProp = 'black', f
           setFirstDraw(true);
 
           setTimeout(() => update(p5), 10);
+        }}
+        windowResized={p5 => {
+          p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
+          resized(p5);
         }}
       />
     </div>
