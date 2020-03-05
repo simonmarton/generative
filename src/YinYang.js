@@ -1,11 +1,13 @@
 import React, { Fragment } from 'react';
+import Color from 'color';
 
 import Canvas from './Canvas';
 
 export default class YinYang extends React.Component {
   state = {
     settings: {
-      size: window.innerHeight - 20
+      size: Math.min(700, window.innerHeight - 20),
+      background: Color({ h: 0, s: 40, l: 50 })
     },
     center: {
       x: 0,
@@ -65,7 +67,7 @@ export default class YinYang extends React.Component {
   draw = p5 => {
     const {
       center,
-      settings: { size }
+      settings: { size, background }
     } = this.state;
 
     const rotation = this.rotation;
@@ -119,10 +121,16 @@ export default class YinYang extends React.Component {
     );
     this.drawYinYang(p5, { center: { x, y }, size: quarter, rotation });
 
-    this.rotation = this.rotation + 0.01;
+    this.rotation = this.rotation + 0.005;
+
+    this.setState({ settings: { size, background: background.rotate(0.5) } });
   };
 
   render() {
+    const {
+      settings: { background }
+    } = this.state;
+
     return (
       <Fragment>
         <Canvas
@@ -130,12 +138,12 @@ export default class YinYang extends React.Component {
           resized={p5 => {
             this.setState({
               center: {
-                x: p5.windowWidth / 2,
-                y: p5.windowHeight / 2
+                x: 0,
+                y: 0
               }
             });
           }}
-          background="#333"
+          background={background.rgb().toString()}
           fullscreen
           webgl
         />
