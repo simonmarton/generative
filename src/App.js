@@ -5,12 +5,9 @@ import DeconcentricCircles from './DeconcentricCircles';
 import Cloud from './Cloud';
 import MaskedImage from './MaskedImage';
 import YinYang from './YinYang';
+import { useState } from 'react';
 
 const routes = [
-  {
-    path: 'dots-n-lines',
-    component: <Perlin />
-  },
   {
     path: 'cloud',
     component: <Cloud />
@@ -20,31 +17,53 @@ const routes = [
     component: <MaskedImage />
   },
   {
-    path: 'deconcentric-circles',
-    component: <DeconcentricCircles />
-  },
-  {
     path: 'yin-yang',
     component: <YinYang />
+  },
+  {
+    path: 'dots-n-lines',
+    component: <Perlin />
+  },
+  {
+    path: 'deconcentric-circles',
+    component: <DeconcentricCircles />
   }
 ];
 
 export default () => {
-  const {
-    location: { pathname }
-  } = window;
+  const [component, setComponent] = useState(null);
 
-  for (const { path, component } of routes) {
-    if (pathname.startsWith(`/${path}`)) {
-      return component;
+  window.onhashchange = () => {
+    checkComp();
+  };
+
+  const checkComp = () => {
+    const {
+      location: { hash }
+    } = window;
+
+    if (!hash && component) {
+      setComponent(null);
     }
+
+    for (const { path, component: c } of routes) {
+      if (hash.startsWith(`#${path}`)) {
+        if (component !== c) setComponent(c);
+        break;
+      }
+    }
+  };
+  checkComp();
+
+  if (component) {
+    return component;
   }
 
   return (
     <ul>
-      {routes.map(({ path, component }) => (
+      {routes.map(({ path }) => (
         <li key={path}>
-          <a href={`/${path}`}>{path}</a>
+          <a href={`/#${path}`}>{path}</a>
         </li>
       ))}
     </ul>
